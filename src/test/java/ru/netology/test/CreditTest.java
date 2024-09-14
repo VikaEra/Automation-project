@@ -10,23 +10,27 @@ import ru.netology.page.HomePage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.DataHelper.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreditTest {
-
-    @BeforeAll
-    static void setUpAll() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
-    }
-
-    @AfterAll
-    static void tearDownAll() {
-        SelenideLogger.removeListener("allure");
-    }
 
     @BeforeEach
     public void setUp() {
         open("http://localhost:8080");
+    }
+
+    @BeforeAll
+    public static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    public static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
+    @AfterAll
+    public static void shouldCleanBase() {
+        SQLHelper.cleanBase();
     }
 
     //Кредит по данным карты APPROVED
@@ -38,6 +42,7 @@ public class CreditTest {
         var form = new CreditPage();
         form.completedForm(cardinfo);
         form.paymentApproved();
+        Assertions.assertEquals("APPROVED", SQLHelper.getCreditPayment());
     }
 
     //Кредит по данным карты DECLINED
@@ -49,11 +54,12 @@ public class CreditTest {
         var form = new CreditPage();
         form.completedForm(cardinfo);
         form.paymentDeclined();
+        Assertions.assertEquals("DECLINED", SQLHelper.getCreditPayment());
     }
 
     //Заполнение поля "Номер карты":
 
-    //Оставим незаполненное поле
+    //Оставить незаполненное поле
     @Test
     public void shouldCardNumberEmptyCredit() {
         var homepage = new HomePage();
@@ -63,7 +69,7 @@ public class CreditTest {
         form.incorrectCardNumberVisible();
     }
 
-    //Введем 1 цифру
+    //Ввести 1 цифру
     @Test
     public void shouldCardNumberOneDigitCredit() {
         var homepage = new HomePage();
@@ -73,7 +79,7 @@ public class CreditTest {
         form.incorrectCardNumberVisible();
     }
 
-    //Введем 10 цифр
+    //Ввести 10 цифр
     @Test
     public void shouldCardNumberTenDigitsCredit() {
         var homepage = new HomePage();
@@ -83,7 +89,7 @@ public class CreditTest {
         form.incorrectCardNumberVisible();
     }
 
-    //Введем 15 цифр
+    //Ввести 15 цифр
     @Test
     public void shouldCardNumberFifteenDigitsCredit() {
         var homepage = new HomePage();
@@ -93,7 +99,7 @@ public class CreditTest {
         form.incorrectCardNumberVisible();
     }
 
-    //Введем 17 цифр
+    //Ввести 17 цифр
     @Test
     public void shouldCardNumberSeventeenDigitsCredit() {
         var homepage = new HomePage();
@@ -103,7 +109,7 @@ public class CreditTest {
         form.paymentDeclined();
     }
 
-    //Введем незарегистрированный номер в базе данных
+    //Ввести незарегистрированный номер в базе данных
     @Test
     public void shouldCardNumberNotRegisteredCredit() {
         var homepage = new HomePage();
@@ -113,7 +119,7 @@ public class CreditTest {
         form.paymentDeclined();
     }
 
-    //Введем специальные символы
+    //Ввести специальные символы
     @Test
     public void shouldCardNumberSpecialSymbolsCredit() {
         var homepage = new HomePage();
@@ -123,7 +129,7 @@ public class CreditTest {
         form.incorrectCardNumberVisible();
     }
 
-    //Введем номер карты кириллицей
+    //Ввести номер карты кириллицей
     @Test
     public void shouldCardNumberCyrillicCredit() {
         var homepage = new HomePage();
@@ -133,7 +139,7 @@ public class CreditTest {
         form.incorrectCardNumberVisible();
     }
 
-    //Введем номер карты латиницей
+    //Ввести номер карты латиницей
     @Test
     public void shouldCardNumberLatinCredit() {
         var homepage = new HomePage();
@@ -143,7 +149,7 @@ public class CreditTest {
         form.incorrectCardNumberVisible();
     }
 
-    //Введем иероглифы
+    //Ввести иероглифы
     @Test
     public void shouldCardNumberHieroglyphsCredit() {
         var homepage = new HomePage();
@@ -155,7 +161,7 @@ public class CreditTest {
 
 //Заполнение поля "Месяц":
 
-    //Оставим незаполненное поле
+    //Оставить незаполненное поле
     @Test
     public void shouldMonthEmptyCredit() {
         var homepage = new HomePage();
@@ -165,7 +171,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Введем два нуля
+    //Ввести два нуля
     @Test
     public void shouldMonthTwoZeroCredit() {
         var homepage = new HomePage();
@@ -175,7 +181,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Введем 1 цифру - ноль
+    //Ввести 1 цифру - ноль
     @Test
     public void shouldMonthOneDigitWithZeroCredit() {
         var homepage = new HomePage();
@@ -185,7 +191,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Введем 1 цифру - не ноль
+    //Ввести 1 цифру - не ноль
     @Test
     public void shouldMonthOneDigitCredit() {
         var homepage = new HomePage();
@@ -195,7 +201,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Введем 2 цифры, невалидный месяц (граничное значение)
+    //Ввести 2 цифры, невалидный месяц (граничное значение)
     @Test
     public void shouldMonthNoValidTwoDigitsLimitCredit() {
         var homepage = new HomePage();
@@ -205,7 +211,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверно указан срок действия карты");
     }
 
-    //Введем 2 цифры, невалидный месяц
+    //Ввести 2 цифры, невалидный месяц
     @Test
     public void shouldMonthNoValidTwoDigitsCredit() {
         var homepage = new HomePage();
@@ -215,7 +221,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверно указан срок действия карты");
     }
 
-    //Введем 3 цифры
+    //Ввести 3 цифры
     @Test
     public void shouldMonthThreeDigitsCredit() {
         var homepage = new HomePage();
@@ -225,7 +231,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Введем специальные символы
+    //Ввести специальные символы
     @Test
     public void shouldMonthSpecialSymbolsCredit() {
         var homepage = new HomePage();
@@ -235,7 +241,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Заполним поле кириллицей
+    //Заполнить поле кириллицей
     @Test
     public void shouldMonthCyrillicCredit() {
         var homepage = new HomePage();
@@ -245,7 +251,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Заполним поле латиницей
+    //Заполнить поле латиницей
     @Test
     public void shouldMonthLatinCredit() {
         var homepage = new HomePage();
@@ -255,7 +261,7 @@ public class CreditTest {
         form.incorrectMonthVisible("Неверный формат");
     }
 
-    //Введем иероглифы
+    //Ввести иероглифы
     @Test
     public void shouldMonthHieroglyphsCredit() {
         var homepage = new HomePage();
@@ -267,7 +273,7 @@ public class CreditTest {
 
 //Заполнение поля "Год":
 
-    //Оставим незаполненное поле
+    //Оставить незаполненное поле
     @Test
     public void shouldYearEmptyCredit() {
         var homepage = new HomePage();
@@ -277,7 +283,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверный формат");
     }
 
-    //Введем 1 цифру - ноль
+    //Ввести 1 цифру - ноль
     @Test
     public void shouldYearOneDigitZeroCredit() {
         var homepage = new HomePage();
@@ -287,7 +293,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверный формат");
     }
 
-    //Введем 1 цифру
+    //Ввести 1 цифру
     @Test
     public void shouldYearOneDigitCredit() {
         var homepage = new HomePage();
@@ -297,7 +303,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверный формат");
     }
 
-    //Введем 2 цифры, 2030 год
+    //Ввести 2 цифры, 2030 год
     @Test
     public void shouldYearNoValidOneCredit() {
         var homepage = new HomePage();
@@ -307,7 +313,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверно указан срок действия карты");
     }
 
-    //Введем 2 цифры, 2023 год, прошедший год
+    //Ввести 2 цифры, 2023 год, прошедший год
     @Test
     public void shouldYearNoValidTwoCredit() {
         var homepage = new HomePage();
@@ -317,7 +323,7 @@ public class CreditTest {
         form.incorrectYearVisible("Истёк срок действия карты");
     }
 
-    //Введем 3 цифры
+    //Ввести 3 цифры
     @Test
     public void shouldYearThreeDigitsCredit() {
         var homepage = new HomePage();
@@ -327,7 +333,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверный формат");
     }
 
-    //Введем специальные символы
+    //Ввести специальные символы
     @Test
     public void shouldYearSpecialSymbolsCredit() {
         var homepage = new HomePage();
@@ -337,7 +343,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверный формат");
     }
 
-    //Введем год кириллицей
+    //Ввести год кириллицей
     @Test
     public void shouldYearCyrillicCredit() {
         var homepage = new HomePage();
@@ -347,7 +353,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверный формат");
     }
 
-    //Введем год латиницей
+    //Ввести год латиницей
     @Test
     public void shouldYearLatinCredit() {
         var homepage = new HomePage();
@@ -357,7 +363,7 @@ public class CreditTest {
         form.incorrectYearVisible("Неверный формат");
     }
 
-    //Введем иероглифы
+    //Ввести иероглифы
     @Test
     public void shouldYearHieroglyphsCredit() {
         var homepage = new HomePage();
@@ -369,7 +375,7 @@ public class CreditTest {
 
     //Заполнение поля "Владелец":
 
-    //Оставим незаполненное поле
+    //Оставить незаполненное поле
     @Test
     public void shouldHolderEmptyCredit() {
         var homepage = new HomePage();
@@ -379,7 +385,7 @@ public class CreditTest {
         form.incorrectHolderVisible();
     }
 
-    //Введем 1 букву
+    //Ввести 1 букву
     @Test
     public void shouldHolderOneLetterCredit() {
         var homepage = new HomePage();
@@ -389,7 +395,7 @@ public class CreditTest {
         form.incorrectHolderVisible();
     }
 
-    //Введем 36 букв (максимум 35)
+    //Ввести 36 букв (максимум 35)
     @Test
     public void shouldHolderThirtySixLetterCredit() {
         var homepage = new HomePage();
@@ -399,7 +405,7 @@ public class CreditTest {
         form.incorrectHolderVisible();
     }
 
-    //Заполним поле кирилицей
+    //Заполнить поле кирилицей
     @Test
     public void shouldHolderCyrillicCredit() {
         var homepage = new HomePage();
@@ -409,7 +415,7 @@ public class CreditTest {
         form.incorrectHolderVisible();
     }
 
-    //Заполним поле цифрами
+    //Заполнить поле цифрами
     @Test
     public void shouldHolderDigitsCredit() {
         var homepage = new HomePage();
@@ -419,7 +425,7 @@ public class CreditTest {
         form.incorrectHolderVisible();
     }
 
-    //Заполним поле специальными символами
+    //Заполнить поле специальными символами
     @Test
     public void shouldHolderSpecialSymbolsCredit() {
         var homepage = new HomePage();
@@ -429,7 +435,7 @@ public class CreditTest {
         form.incorrectHolderVisible();
     }
 
-    //Заполним поле иероглифами
+    //Заполнить поле иероглифами
     @Test
     public void shouldHolderHieroglyphsCredit() {
         var homepage = new HomePage();
@@ -441,7 +447,7 @@ public class CreditTest {
 
 //Заполнение поля "CVC/CVV":
 
-    //Оставим незаполненное поле
+    //Оставить незаполненное поле
     @Test
     public void shouldCVCEmptyCredit() {
         var homepage = new HomePage();
@@ -451,7 +457,7 @@ public class CreditTest {
         form.incorrectCodeVisible();
     }
 
-    //Введем 1 цифру
+    //Ввести 1 цифру
     @Test
     public void shouldCVCOneDigitCredit() {
         var homepage = new HomePage();
@@ -461,7 +467,7 @@ public class CreditTest {
         form.incorrectCodeVisible();
     }
 
-    //Введем 2 цифры
+    //Ввести 2 цифры
     @Test
     public void shouldCVCTwoDigitsCredit() {
         var homepage = new HomePage();
@@ -471,7 +477,7 @@ public class CreditTest {
         form.incorrectCodeVisible();
     }
 
-    //Введем 4 цифры
+    //Ввести 4 цифры
     @Test
     public void shouldCVCFourDigitsCredit() {
         var homepage = new HomePage();
@@ -481,7 +487,7 @@ public class CreditTest {
         form.incorrectCodeVisible();
     }
 
-    //Введем специальные символы
+    //Ввести специальные символы
     @Test
     public void shouldCVCSpecialSymbolsCredit() {
         var homepage = new HomePage();
@@ -491,7 +497,7 @@ public class CreditTest {
         form.incorrectCodeVisible();
     }
 
-    //Введем код кириллицей
+    //Ввести код кириллицей
     @Test
     public void shouldCVCCyrillicCredit() {
         var homepage = new HomePage();
@@ -501,7 +507,7 @@ public class CreditTest {
         form.incorrectCodeVisible();
     }
 
-    //Введем код латиницей
+    //Ввести код латиницей
     @Test
     public void shouldCVCLatinCredit() {
         var homepage = new HomePage();
@@ -511,7 +517,7 @@ public class CreditTest {
         form.incorrectCodeVisible();
     }
 
-    //Введем иероглифы
+    //Ввести иероглифы
     @Test
     public void shouldCVCHieroglyphsCredit() {
         var homepage = new HomePage();

@@ -58,7 +58,8 @@ public class CreditPage {
     }
 
     public void paymentDeclined() {
-        $(".notification_status_error").shouldBe(Condition.visible, Duration.ofSeconds(25));
+        $(".notification_status_error").
+                shouldBe(Condition.visible, Duration.ofSeconds(25));
     }
 
     public void incorrectCardNumberVisible() {

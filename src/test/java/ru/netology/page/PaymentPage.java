@@ -3,6 +3,7 @@ package ru.netology.page;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.data.DataHelper;
+
 import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.text;
@@ -57,7 +58,8 @@ public class PaymentPage {
     }
 
     public void paymentDeclined() {
-        $(".notification_status_error").shouldBe(Condition.visible, Duration.ofSeconds(25));
+        $(".notification_status_error").
+                shouldBe(Condition.visible, Duration.ofSeconds(25));
     }
 
     public void incorrectCardNumberVisible() {

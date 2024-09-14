@@ -2,7 +2,6 @@ package ru.netology.data;
 
 import org.apache.commons.dbutils.QueryRunner;
 import lombok.SneakyThrows;
-import lombok.val;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,39 +18,24 @@ public class SQLHelper {
     }
 
     @SneakyThrows
-    public static void clearPaymentTable() {
-        val deletePaymentEntity = "DELETE FROM payment_entity";
-        try (val conn = getConn()) {
-            runner.update(conn, deletePaymentEntity);
-        }
+    public static String getCardPayment() {
+        var connection = getConn();
+        var codeSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
+        return runner.query(connection, codeSQL, new ScalarHandler<>());
     }
 
     @SneakyThrows
-    public static void clearCreditTable() {
-        val deleteCreditEntity = "DELETE FROM credit_request_entity";
-        try (val conn = getConn()) {
-            runner.update(conn, deleteCreditEntity);
-        }
+    public static String getCreditPayment() {
+        var connection = getConn();
+        var codeSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
+        return runner.query(connection, codeSQL, new ScalarHandler<>());
     }
 
     @SneakyThrows
-    public static String getPaymentStatus() {
-        val statusSQL = "SELECT status FROM payment_entity LIMIT 1";
-        return getStatus(statusSQL);
-    }
-
-    @SneakyThrows
-    public static String getCreditRequestStatus() {
-        String query = "SELECT status FROM credit_request_entity LIMIT 1";
-        return getStatus(query);
-    }
-
-    @SneakyThrows
-    private static String getStatus(String query) {
-        val runner = new QueryRunner();
-        try (val conn = getConn()) {
-            String status = runner.query(conn, query, new ScalarHandler<String>());
-            return status;
-        }
+    public static void cleanBase() {
+        var connection = getConn();
+        runner.execute(connection, "DELETE FROM credit_request_entity");
+        runner.execute(connection, "DELETE FROM order_entity");
+        runner.execute(connection, "DELETE FROM payment_entity");
     }
 }
