@@ -18,19 +18,19 @@
    При подключении к базе данных MySQL:
 
 1. 
-![allure1.png](..%2F..%2F..%2FDesktop%2Fallure1.png)
+![img_5.png](img_5.png)
 
 2.
-![allure2.png](..%2F..%2F..%2FDesktop%2Fallure2.png)
+![img_6.png](img_6.png)
 
 3.
-![allure3.png](..%2F..%2F..%2FDesktop%2Fallure3.png)
+![img_7.png](img_7.png)
 
 4.
-![allure4.png](..%2F..%2F..%2FDesktop%2Fallure4.png)
+![img_8.png](img_8.png)
 
 5.
-![allure5.png](..%2F..%2F..%2FDesktop%2Fallure5.png)
+![img_9.png](img_9.png)
 
 - Всего автотестов: 98 тестов;
 - Позитивные автотесты: 74 теста;
