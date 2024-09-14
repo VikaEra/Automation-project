@@ -2,10 +2,10 @@
 ## Веб-приложение "Путешествие дня".
 
 ## Документы.
-- [Задание на курсовой проект]()
-- [План автоматизации]()
-- [Отчет по результатам автоматизированного тестирования]()
-- [Отчет по автоматизации]()
+- [Задание на курсовой проект](https://github.com/VikaEra/Automation-project/blob/master/documents/Task.md)
+- [План автоматизации](https://github.com/VikaEra/Automation-project/blob/master/documents/Plan.md)
+- [Отчет по результатам автоматизированного тестирования](https://github.com/VikaEra/Automation-project/blob/master/documents/Report.md)
+- [Отчет по автоматизации](https://github.com/VikaEra/Automation-project/blob/master/documents/Summary.md)
 
 ## Описание приложения.
 Веб-приложение представляет собой сервис по покупке тура, который можно оплатить двумя способами:
