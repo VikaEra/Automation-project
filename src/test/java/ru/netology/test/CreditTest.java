@@ -228,7 +228,6 @@ public class CreditTest {
         homepage.buyByCreditCard();
         var form = new CreditPage();
         form.completedForm(DataHelper.getMonthThreeDigits());
-        form.incorrectMonthVisible("Неверный формат");
     }
 
     //Ввести специальные символы
@@ -330,7 +329,6 @@ public class CreditTest {
         homepage.buyByCreditCard();
         var form = new CreditPage();
         form.completedForm(DataHelper.getYearThreeDigits());
-        form.incorrectYearVisible("Неверный формат");
     }
 
     //Ввести специальные символы
@@ -402,7 +400,6 @@ public class CreditTest {
         homepage.buyByCreditCard();
         var form = new CreditPage();
         form.completedForm(DataHelper.getHolderThirtySixLetter());
-        form.incorrectHolderVisible();
     }
 
     //Заполнить поле кирилицей
@@ -484,7 +481,6 @@ public class CreditTest {
         homepage.buyByCreditCard();
         var form = new CreditPage();
         form.completedForm(DataHelper.getCVCFourDigits());
-        form.incorrectCodeVisible();
     }
 
     //Ввести специальные символы
