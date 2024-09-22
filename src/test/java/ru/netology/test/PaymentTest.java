@@ -9,13 +9,13 @@ import ru.netology.page.HomePage;
 import ru.netology.page.PaymentPage;
 
 import static com.codeborne.selenide.Selenide.open;
-import static ru.netology.data.DataHelper.*;
 
 public class PaymentTest {
 
     @BeforeEach
     public void setUp() {
-        open("http://localhost:8080");
+        String url = System.getProperty("db.url");
+        open(url);
     }
 
     @BeforeAll
@@ -36,11 +36,9 @@ public class PaymentTest {
     //Оплата по карте APPROVED
     @Test
     void shouldApprovedCardPayment() {
-        var cardinfo = new DataHelper.CardInfo(getApprovedCardNumber(), getValidMonth(), getValidYear(), getValidHolder(), getValidCVC());
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
-        form.completedForm(cardinfo);
+        var form = homepage.buyByPaymentCard();
+        form.completedForm(DataHelper.paymentByCardApproved());
         form.paymentApproved();
         Assertions.assertEquals("APPROVED", SQLHelper.getCardPayment());
     }
@@ -48,11 +46,9 @@ public class PaymentTest {
     //Оплата по карте DECLINED
     @Test
     void shouldDeclinedCardPayment() {
-        var cardinfo = new DataHelper.CardInfo(getDeclinedCardNumber(), getValidMonth(), getValidYear(), getValidHolder(), getValidCVC());
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
-        form.completedForm(cardinfo);
+        var form = homepage.buyByPaymentCard();
+        form.completedForm(DataHelper.paymentByCardDECLINED());
         form.paymentDeclined();
         Assertions.assertEquals("DECLINED", SQLHelper.getCardPayment());
     }
@@ -63,8 +59,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberEmpty() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberEmpty());
         form.incorrectCardNumberVisible();
     }
@@ -73,8 +68,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberOneDigit() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberOneDigit());
         form.incorrectCardNumberVisible();
     }
@@ -83,8 +77,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberTenDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberTenDigits());
         form.incorrectCardNumberVisible();
     }
@@ -93,8 +86,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberFifteenDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberFifteenDigits());
         form.incorrectCardNumberVisible();
     }
@@ -103,8 +95,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberSeventeenDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberSeventeenDigits());
         form.paymentDeclined();
     }
@@ -113,8 +104,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberNotRegistered() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberNotRegistered());
         form.paymentDeclined();
     }
@@ -123,8 +113,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberSpecialSymbols() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberSpecialSymbols());
         form.incorrectCardNumberVisible();
     }
@@ -133,8 +122,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberCyrillic() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberCyrillic());
         form.incorrectCardNumberVisible();
     }
@@ -143,8 +131,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberLatin() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberLatin());
         form.incorrectCardNumberVisible();
     }
@@ -153,8 +140,7 @@ public class PaymentTest {
     @Test
     public void shouldCardNumberHieroglyphs() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCardNumberHieroglyphs());
         form.incorrectCardNumberVisible();
     }
@@ -165,8 +151,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthEmpty() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthEmpty());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -175,8 +160,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthTwoZero() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthTwoZero());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -185,8 +169,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthOneDigitWithZero() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthOneDigitWithZero());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -195,8 +178,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthOneDigit() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthOneDigit());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -205,8 +187,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthNoValidTwoDigitsLimit() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthNoValidTwoDigitsLimit());
         form.incorrectMonthVisible("Неверно указан срок действия карты");
     }
@@ -215,8 +196,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthNoValidTwoDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthNoValidTwoDigits());
         form.incorrectMonthVisible("Неверно указан срок действия карты");
     }
@@ -225,8 +205,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthThreeDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthThreeDigits());
     }
 
@@ -234,8 +213,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthSpecialSymbols() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthSpecialSymbols());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -244,8 +222,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthCyrillic() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthCyrillic());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -254,8 +231,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthLatin() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthLatin());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -264,8 +240,7 @@ public class PaymentTest {
     @Test
     public void shouldMonthHieroglyphs() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getMonthHieroglyphs());
         form.incorrectMonthVisible("Неверный формат");
     }
@@ -276,8 +251,7 @@ public class PaymentTest {
     @Test
     public void shouldYearEmpty() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearEmpty());
         form.incorrectYearVisible("Неверный формат");
     }
@@ -286,8 +260,7 @@ public class PaymentTest {
     @Test
     public void shouldYearOneDigitZero() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearOneDigitZero());
         form.incorrectYearVisible("Неверный формат");
     }
@@ -296,8 +269,7 @@ public class PaymentTest {
     @Test
     public void shouldYearOneDigit() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearOneDigit());
         form.incorrectYearVisible("Неверный формат");
     }
@@ -306,8 +278,7 @@ public class PaymentTest {
     @Test
     public void shouldYearNoValidOne() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearNoValidOne());
         form.incorrectYearVisible("Неверно указан срок действия карты");
     }
@@ -316,8 +287,7 @@ public class PaymentTest {
     @Test
     public void shouldYearNoValidTwo() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearNoValidTwo());
         form.incorrectYearVisible("Истёк срок действия карты");
     }
@@ -326,8 +296,7 @@ public class PaymentTest {
     @Test
     public void shouldYearThreeDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearThreeDigits());
     }
 
@@ -335,8 +304,7 @@ public class PaymentTest {
     @Test
     public void shouldYearSpecialSymbols() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearSpecialSymbols());
         form.incorrectYearVisible("Неверный формат");
     }
@@ -345,8 +313,7 @@ public class PaymentTest {
     @Test
     public void shouldYearCyrillic() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearCyrillic());
         form.incorrectYearVisible("Неверный формат");
     }
@@ -355,8 +322,7 @@ public class PaymentTest {
     @Test
     public void shouldYearLatin() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearLatin());
         form.incorrectYearVisible("Неверный формат");
     }
@@ -365,8 +331,7 @@ public class PaymentTest {
     @Test
     public void shouldYearHieroglyphs() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getYearHieroglyphs());
         form.incorrectYearVisible("Неверный формат");
     }
@@ -377,8 +342,7 @@ public class PaymentTest {
     @Test
     public void shouldHolderEmpty() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getHolderEmpty());
         form.incorrectHolderVisible();
     }
@@ -387,8 +351,7 @@ public class PaymentTest {
     @Test
     public void shouldHolderOneLetter() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getHolderOneLetter());
         form.incorrectHolderVisible();
     }
@@ -397,8 +360,7 @@ public class PaymentTest {
     @Test
     public void shouldHolderThirtySixLetter() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getHolderThirtySixLetter());
     }
 
@@ -406,8 +368,7 @@ public class PaymentTest {
     @Test
     public void shouldHolderCyrillic() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getHolderCyrillic());
         form.incorrectHolderVisible();
     }
@@ -416,8 +377,7 @@ public class PaymentTest {
     @Test
     public void shouldHolderDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getHolderDigits());
         form.incorrectHolderVisible();
     }
@@ -426,8 +386,7 @@ public class PaymentTest {
     @Test
     public void shouldHolderSpecialSymbols() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getHolderSpecialSymbols());
         form.incorrectHolderVisible();
     }
@@ -436,8 +395,7 @@ public class PaymentTest {
     @Test
     public void shouldHolderHieroglyphs() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getHolderHieroglyphs());
         form.incorrectHolderVisible();
     }
@@ -448,8 +406,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCEmpty() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCEmpty());
         form.incorrectCodeVisible();
     }
@@ -458,8 +415,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCOneDigit() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCOneDigit());
         form.incorrectCodeVisible();
     }
@@ -468,8 +424,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCTwoDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCTwoDigits());
         form.incorrectCodeVisible();
     }
@@ -478,8 +433,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCFourDigits() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCFourDigits());
     }
 
@@ -487,8 +441,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCSpecialSymbols() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCSpecialSymbols());
         form.incorrectCodeVisible();
     }
@@ -497,8 +450,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCCyrillic() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCCyrillic());
         form.incorrectCodeVisible();
     }
@@ -507,8 +459,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCLatin() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCLatin());
         form.incorrectCodeVisible();
     }
@@ -517,8 +468,7 @@ public class PaymentTest {
     @Test
     public void shouldCVCHieroglyphs() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.completedForm(DataHelper.getCVCHieroglyphs());
         form.incorrectCodeVisible();
     }
@@ -527,8 +477,7 @@ public class PaymentTest {
     @Test
     void shouldFormEmpty() {
         var homepage = new HomePage();
-        homepage.buyByPaymentCard();
-        var form = new PaymentPage();
+        var form = homepage.buyByPaymentCard();
         form.emptyForm();
     }
 }

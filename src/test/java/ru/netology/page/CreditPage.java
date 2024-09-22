@@ -58,8 +58,10 @@ public class CreditPage {
     }
 
     public void paymentDeclined() {
-        $(".notification_status_error").
-                shouldBe(Condition.visible, Duration.ofSeconds(25));
+        $(".notification_status_error")
+                .shouldBe(Condition.visible, Duration.ofSeconds(25))
+                .$(byCssSelector(".notification__content"))
+                .shouldHave(text("Банк отказал в проведении операции."));
     }
 
     public void incorrectCardNumberVisible() {

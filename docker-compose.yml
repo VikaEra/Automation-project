@@ -19,14 +19,3 @@ services:
       - POSTGRES_PASSWORD=pass
     ports:
       - '5432:5432'
-  node:
-    image: "node"
-    user: "node"
-    working_dir: /home/node/app
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./gate-simulator
-    ports:
-      - 9999:9999
-    command: "npm start"

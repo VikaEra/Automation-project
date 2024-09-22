@@ -39,6 +39,16 @@ public class DataHelper {
         return String.format("%03d", result);
     }
 
+    //Оплата по карте APPROVED
+    public static CardInfo paymentByCardApproved() {
+        return new CardInfo(getApprovedCardNumber(), getValidMonth(), getValidYear(), getValidHolder(), getValidCVC());
+    }
+
+    //Оплата по карте DECLINED
+    public static CardInfo paymentByCardDECLINED() {
+        return new CardInfo(getDeclinedCardNumber(), getValidMonth(), getValidYear(), getValidHolder(), getValidCVC());
+    }
+
     //Заполнение поля "Номер карты":
 
     //Остаить незаполненное поле
