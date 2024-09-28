@@ -19,23 +19,43 @@ public class SQLHelper {
 
     @SneakyThrows
     public static String getCardPayment() {
-        var connection = getConn();
-        var codeSQL = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1;";
-        return runner.query(connection, codeSQL, new ScalarHandler<>());
+        String statusSQL = "SELECT status FROM payment_entity";
+        return getStatus(statusSQL);
     }
 
     @SneakyThrows
     public static String getCreditPayment() {
-        var connection = getConn();
-        var codeSQL = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1;";
-        return runner.query(connection, codeSQL, new ScalarHandler<>());
+        String statusSQL = "SELECT status FROM credit_request_entity";
+        return getStatus(statusSQL);
     }
 
     @SneakyThrows
-    public static void cleanBase() {
-        var connection = getConn();
-        runner.execute(connection, "DELETE FROM credit_request_entity");
-        runner.execute(connection, "DELETE FROM order_entity");
-        runner.execute(connection, "DELETE FROM payment_entity");
+    private static String getStatus(String query) {
+        var runner = new QueryRunner();
+        var conn = getConn();
+        String status = runner.query(conn, query, new ScalarHandler<String>());
+        return status;
+    }
+
+    @SneakyThrows
+    public static void cleanTablePayment() {
+        var deletePaymentEntity = "DELETE FROM payment_entity ";
+        var runner = new QueryRunner();
+        try (var conn = getConn()) {
+            runner.update(conn, deletePaymentEntity);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    }
+
+    @SneakyThrows
+    public static void cleanTableCredit() {
+        var deleteCreditEntity = "DELETE FROM credit_request_entity";
+        var runner = new QueryRunner();
+        try (var conn = getConn()) {
+            runner.update(conn, deleteCreditEntity);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
 }

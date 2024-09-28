@@ -8,6 +8,7 @@ import org.junit.jupiter.api.*;
 import ru.netology.page.HomePage;
 
 import static com.codeborne.selenide.Selenide.open;
+import org.junit.jupiter.api.Assertions;
 
 public class CreditTest {
 
@@ -29,7 +30,7 @@ public class CreditTest {
 
     @AfterAll
     public static void shouldCleanBase() {
-        SQLHelper.cleanBase();
+        SQLHelper.cleanTableCredit();
     }
 
     //Кредит по данным карты APPROVED
@@ -61,6 +62,7 @@ public class CreditTest {
         var form = homepage.buyByCreditCard();
         form.completedForm(DataHelper.getCardNumberEmpty());
         form.incorrectCardNumberVisible();
+        Assertions.assertEquals("DECLINED", SQLHelper.getCreditPayment());
     }
 
     //Ввести 1 цифру

@@ -6,15 +6,15 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.data.SQLHelper;
 import ru.netology.page.HomePage;
-import ru.netology.page.PaymentPage;
 
 import static com.codeborne.selenide.Selenide.open;
+import org.junit.jupiter.api.Assertions;
 
 public class PaymentTest {
 
     @BeforeEach
     public void setUp() {
-        String url = System.getProperty("db.url");
+        String url = System.getProperty("sut.url");
         open(url);
     }
 
@@ -30,7 +30,7 @@ public class PaymentTest {
 
     @AfterAll
     public static void shouldCleanBase() {
-        SQLHelper.cleanBase();
+        SQLHelper.cleanTablePayment();
     }
 
     //Оплата по карте APPROVED
